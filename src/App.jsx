@@ -4,6 +4,7 @@ import LoginForm from './components/LoginForm'
 import blogService from './services/blogs'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
 
 
 
@@ -38,6 +39,16 @@ const App = () => {
     }
   }, [])
 
+  const createBlog = async (newBlog) => {
+    console.log(`creating new blog ${newBlog}`)
+    await blogService.create({...newBlog, user:user.id})
+    setSubmittedBlog(newBlog)
+    setMessage(`A new blog ${newBlog.title} by ${newBlog.author} added!`)
+    setMessageType('notice')
+    
+
+  }
+
   if (user===null){
    return (
     <>
@@ -51,7 +62,9 @@ const App = () => {
     <>
     <Notification  message={message} messageType={messageType} setMessage={setMessage} setMessageType={setMessageType}/>
     <BlogList key={JSON.stringify(blogs)} blogs={blogs} user={user} setUser={setUser} />
-    <BlogForm user={user} setSubmittedBlog={setSubmittedBlog} setMessage={setMessage} setMessageType={setMessageType} />
+    <Togglable buttonLabel="new note">
+      <BlogForm createBlog={createBlog} />
+    </Togglable>
     </>
 
   )

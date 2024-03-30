@@ -2,25 +2,19 @@ import blogService from '../services/blogs'
 import { useState } from 'react'
 
 
-const BlogForm = ({user, setSubmittedBlog, setMessage, setMessageType}) => {
-    const [author, setAuthor] = useState('') 
-    const [title, setTitle] = useState('') 
+const BlogForm = ({createBlog}) => {
+    const [author, setAuthor] = useState('')
     const [url, setUrl] = useState('') 
+    const [title, setTitle] = useState('') 
 
 
-
-    const handleCreate = async (event) => {
+    const handleCreate = (event) => {
         event.preventDefault()
-        const newBlog = {"author": author, "title": title, "url":url, user:user.id}
-        console.log(`creating new blog ${newBlog}`)
-        await blogService.create(newBlog)
-        setSubmittedBlog(newBlog)
-        setMessage(`A new blog ${newBlog.title} by ${newBlog.author} added!`)
-        setMessageType('notice')
+        createBlog({"title": title, "url": url, "author": author})
         setAuthor('')
         setTitle('')
         setUrl('')
-
+      
     }
 
 
@@ -52,7 +46,7 @@ const BlogForm = ({user, setSubmittedBlog, setMessage, setMessageType}) => {
             type="text"
             value={url}
             name="URL"
-            onChange={({ target }) => setUrl(target.value)}
+            onChange={({ target }) => setUrl( target.value)}
           />
         </div>
         <button type="submit">create</button>
