@@ -2,29 +2,29 @@ import blogService from '../services/blogs'
 import { useState } from 'react'
 
 
-const BlogForm = ({createBlog}) => {
-    const [author, setAuthor] = useState('')
-    const [url, setUrl] = useState('') 
-    const [title, setTitle] = useState('') 
+const BlogForm = ({ createBlog }) => {
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
+  const [title, setTitle] = useState('')
 
 
-    const handleCreate = (event) => {
-        event.preventDefault()
-        createBlog({"title": title, "url": url, "author": author})
-        setAuthor('')
-        setTitle('')
-        setUrl('')
-      
-    }
+  const handleCreate = (event) => {
+    event.preventDefault()
+    createBlog({ 'title': title, 'url': url, 'author': author })
+    setAuthor('')
+    setTitle('')
+    setUrl('')
+
+  }
 
 
-    return (
-        <div>
-        <h2>Create new</h2>
-        <form onSubmit={handleCreate}>
+  return (
+    <div>
+      <h2>Create new</h2>
+      <form onSubmit={handleCreate}>
         <div>
           title
-            <input
+          <input
             type="text"
             value={title}
             name="Title"
@@ -33,7 +33,7 @@ const BlogForm = ({createBlog}) => {
         </div>
         <div>
           author
-            <input
+          <input
             type="text"
             value={author}
             name="Author"
@@ -42,7 +42,7 @@ const BlogForm = ({createBlog}) => {
         </div>
         <div>
           url
-            <input
+          <input
             type="text"
             value={url}
             name="URL"
@@ -51,8 +51,8 @@ const BlogForm = ({createBlog}) => {
         </div>
         <button type="submit">create</button>
       </form>
-      </div>
-    )
+    </div>
+  )
 }
 
 export default BlogForm
