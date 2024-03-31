@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import BlogList from './components/BlogList'
 import LoginForm from './components/LoginForm'
 import blogService from './services/blogs'
@@ -23,8 +23,8 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then(blogs => {
-      console.log(blogs)
-      setBlogs( blogs )
+      //console.log(blogs)
+      setBlogs( blogs.sort((a,b)=> b.likes - a.likes) )
     
     }
     )  
@@ -45,8 +45,20 @@ const App = () => {
     setSubmittedBlog(newBlog)
     setMessage(`A new blog ${newBlog.title} by ${newBlog.author} added!`)
     setMessageType('notice')
-    
+  }
 
+  const giveLike = async (updatedBlog) => {
+    const response = await blogService.update(updatedBlog)
+    let curBlogs = blogs
+    const index = curBlogs.findIndex(x => x.id===updatedBlog.id)
+    curBlogs[index] = response
+    console.log(curBlogs)
+    setSubmittedBlog(curBlogs)
+  }
+
+  const deleteBlog = async (id) => {
+    const response = await blogService.del(id)
+    setSubmittedBlog(response)
   }
 
   if (user===null){
@@ -61,7 +73,7 @@ const App = () => {
   return (
     <>
     <Notification  message={message} messageType={messageType} setMessage={setMessage} setMessageType={setMessageType}/>
-    <BlogList key={JSON.stringify(blogs)} blogs={blogs} user={user} setUser={setUser} />
+    <BlogList key={JSON.stringify(blogs)} blogs={blogs} user={user} setUser={setUser} giveLike={giveLike} deleteBlog={deleteBlog}/>
     <Togglable buttonLabel="new note">
       <BlogForm createBlog={createBlog} />
     </Togglable>

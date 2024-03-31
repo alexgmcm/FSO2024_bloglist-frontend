@@ -1,7 +1,8 @@
 import Blog from './Blog'
 import LogoutButton from './LogoutButton'
 
-const BlogList =  ({blogs, user, setUser}) => {
+const BlogList =  ({blogs, user, setUser, giveLike, deleteBlog}) => {
+    
 
     return (
     <div>
@@ -10,7 +11,7 @@ const BlogList =  ({blogs, user, setUser}) => {
         {user.name} logged in. <LogoutButton setUser={setUser} user={user}/>
         </p>
         {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} />
+          <Blog key={blog.id} blog={blog} giveLike={giveLike} user={user} deleteBlog={deleteBlog} />
         )}
     </div>
     )
