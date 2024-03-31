@@ -31,6 +31,7 @@ const LoginForm = ({ username, setUsername, password,setPassword, setUser, setMe
       <div>
           username
         <input
+          data-testid="username"
           type="text"
           value={username}
           name="Username"
@@ -40,6 +41,7 @@ const LoginForm = ({ username, setUsername, password,setPassword, setUser, setMe
       <div>
           password
         <input
+          data-testid="password"
           type="password"
           value={password}
           name="Password"
