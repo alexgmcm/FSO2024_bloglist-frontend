@@ -45,14 +45,14 @@ const Blog = ({ blog , giveLike, user, deleteBlog }) => {
 
   if (!visible) { return (
     <div style={blogStyle}>
-      {blog.title} {blog.author} <button onClick={toggleVisible}>view</button>
+      <div style={{ 'display':'inline' }}>{blog.title} {blog.author}</div> <button onClick={toggleVisible}>view</button>
     </div>
   )
   }
   else {
     return (
       <div style={blogStyle}>
-        {blog.title} {blog.author} <button onClick={toggleVisible}>hide</button>
+        <div style={{ 'display':'inline' }}> {blog.title} {blog.author} </div> <button onClick={toggleVisible}>hide</button>
         <div>{blog.url}</div>
         <div>likes {blog.likes}</div>  <button onClick={handleLike}>like</button>
         <div>{blog.user ? blog.user.name : 'No User'}</div>
