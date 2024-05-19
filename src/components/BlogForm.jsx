@@ -1,22 +1,18 @@
-import blogService from '../services/blogs'
-import { useState } from 'react'
-
+import blogService from "../services/blogs";
+import { useState } from "react";
 
 const BlogForm = ({ createBlog }) => {
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
-  const [title, setTitle] = useState('')
-
+  const [author, setAuthor] = useState("");
+  const [url, setUrl] = useState("");
+  const [title, setTitle] = useState("");
 
   const handleCreate = (event) => {
-    event.preventDefault()
-    createBlog({ 'title': title, 'url': url, 'author': author })
-    setAuthor('')
-    setTitle('')
-    setUrl('')
-
-  }
-
+    event.preventDefault();
+    createBlog({ title: title, url: url, author: author });
+    setAuthor("");
+    setTitle("");
+    setUrl("");
+  };
 
   return (
     <div>
@@ -29,7 +25,7 @@ const BlogForm = ({ createBlog }) => {
             type="text"
             value={title}
             name="Title"
-            placeholder='write title here...'
+            placeholder="write title here..."
             onChange={({ target }) => setTitle(target.value)}
           />
         </div>
@@ -40,7 +36,7 @@ const BlogForm = ({ createBlog }) => {
             type="text"
             value={author}
             name="Author"
-            placeholder='write author here...'
+            placeholder="write author here..."
             onChange={({ target }) => setAuthor(target.value)}
           />
         </div>
@@ -51,14 +47,14 @@ const BlogForm = ({ createBlog }) => {
             type="text"
             value={url}
             name="URL"
-            placeholder='write url here...'
-            onChange={({ target }) => setUrl( target.value)}
+            placeholder="write url here..."
+            onChange={({ target }) => setUrl(target.value)}
           />
         </div>
         <button type="submit">create</button>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default BlogForm
+export default BlogForm;

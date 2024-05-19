@@ -1,35 +1,39 @@
-import loginService from '../services/login'
-import blogService from '../services/blogs'
+import loginService from "../services/login";
+import blogService from "../services/blogs";
 
-
-const LoginForm = ({ username, setUsername, password,setPassword, setUser, setMessage, setMessageType }) => {
-
+const LoginForm = ({
+  username,
+  setUsername,
+  password,
+  setPassword,
+  setUser,
+  setMessage,
+  setMessageType,
+}) => {
   const handleLogin = async (event) => {
-    event.preventDefault()
+    event.preventDefault();
 
     try {
       const user = await loginService.login({
-        username, password,
-      })
-      window.localStorage.setItem(
-        'loggedNoteappUser', JSON.stringify(user)
-      )
-      setUser(user)
-      setUsername('')
-      setPassword('')
-      blogService.setToken(user.token)
+        username,
+        password,
+      });
+      window.localStorage.setItem("loggedNoteappUser", JSON.stringify(user));
+      setUser(user);
+      setUsername("");
+      setPassword("");
+      blogService.setToken(user.token);
     } catch (exception) {
-      console.log(exception)
-      setMessage('Wrong credentials')
-      setMessageType('error')
+      console.log(exception);
+      setMessage("Wrong credentials");
+      setMessageType("error");
     }
-  }
-
+  };
 
   return (
     <form onSubmit={handleLogin}>
       <div>
-          username
+        username
         <input
           data-testid="username"
           type="text"
@@ -39,7 +43,7 @@ const LoginForm = ({ username, setUsername, password,setPassword, setUser, setMe
         />
       </div>
       <div>
-          password
+        password
         <input
           data-testid="password"
           type="password"
@@ -50,9 +54,7 @@ const LoginForm = ({ username, setUsername, password,setPassword, setUser, setMe
       </div>
       <button type="submit">login</button>
     </form>
+  );
+};
 
-  )
-
-}
-
-export default LoginForm
+export default LoginForm;
