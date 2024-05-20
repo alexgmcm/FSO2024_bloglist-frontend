@@ -1,15 +1,10 @@
 import Blog from './Blog'
-import LogoutButton from './LogoutButton'
 import PropTypes from 'prop-types'
 
-const BlogList = ({ blogs, userDispatch,userState, giveLike, deleteBlog }) => {
+const BlogList = ({ blogs, userState, giveLike, deleteBlog }) => {
     return (
+
         <div>
-            <h2>blogs</h2>
-            <p>
-                {userState.name} logged in.{' '}
-                <LogoutButton userDispatch={userDispatch} userState={userState} />
-            </p>
             {blogs.map((blog) => (
                 <Blog
                     key={blog.id}
@@ -26,7 +21,6 @@ const BlogList = ({ blogs, userDispatch,userState, giveLike, deleteBlog }) => {
 BlogList.propTypes = {
     blogs: PropTypes.array.isRequired,
     userState: PropTypes.object.isRequired,
-    userDispatch: PropTypes.func.isRequired,
     giveLike: PropTypes.func.isRequired,
     deleteBlog: PropTypes.func.isRequired,
 }

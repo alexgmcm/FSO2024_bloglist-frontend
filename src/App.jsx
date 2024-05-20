@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef, useReducer } from 'react'
-import { useQuery, useMutation, useQueryClient  } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 
 import BlogList from './components/BlogList'
 import LoginForm from './components/LoginForm'
@@ -7,15 +9,14 @@ import blogService from './services/blogs'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
+import Users from './components/Users'
 import {
     notificationReducer,
     notificationSideEffects,
     initialNotificationState,
 } from './reducers/notifications'
-import {
-    userReducer,
-    initialUserState
-} from './reducers/user'
+import { userReducer, initialUserState } from './reducers/user'
+import Header from './components/Header'
 
 const App = () => {
     //const [username, setUsername] = useState('')
@@ -29,9 +30,7 @@ const App = () => {
         initialNotificationState
     )
 
-    const [userState, userDispatch] = useReducer(
-        userReducer, initialUserState
-    )
+    const [userState, userDispatch] = useReducer(userReducer, initialUserState)
 
     const queryClient = useQueryClient()
     useEffect(() => {
@@ -45,6 +44,7 @@ const App = () => {
     //console.log(JSON.parse(JSON.stringify(blogQuery)))
 
     const blogs = blogQuery.data
+    console.log(blogs)
 
     /*
       // OLD CODE USING USE STATE FOR BLOGS
@@ -62,8 +62,9 @@ const App = () => {
             const user = JSON.parse(loggedUserJSON)
             console.log(user)
             //setUser(user)
-            userDispatch({type:"SET_USERNAME", username:user.username})
-            userDispatch({type:"SET_NAME", name:user.name})
+            userDispatch({ type: 'SET_USERNAME', username: user.username })
+            userDispatch({ type: 'SET_NAME', name: user.name })
+            userDispatch({ type: 'SET_TOKEN', name: user.token })
             blogService.setToken(user.token)
         }
     }, [])
@@ -104,7 +105,6 @@ const App = () => {
         //setSubmittedBlog(curBlogs) */
         //console.log("Liking blog", updatedBlog)
         likeBlogMutation.mutate(updatedBlog)
-
     }
 
     const delBlogMutation = useMutation({
@@ -139,18 +139,24 @@ const App = () => {
 
     return (
         <>
+        <Router>
             <Notification notificationState={notificationState} />
-            <BlogList
+            <Header userState={userState} userDispatch={userDispatch}/>
+            <Routes>
+            <Route path="/users" element={<Users blogs={blogs} />}/>
+            <Route path="/" element= {<> <BlogList
                 key={JSON.stringify(blogs)}
                 blogs={blogs}
-                userDispatch={userDispatch}
                 userState={userState}
                 giveLike={giveLike}
                 deleteBlog={deleteBlog}
-            />
-            <Togglable buttonLabel="new note">
-                <BlogForm createBlog={createBlog} />
-            </Togglable>
+            /> <Togglable buttonLabel="new note">
+            <BlogForm createBlog={createBlog} />
+        </Togglable> </>} />
+           
+            
+            </Routes>
+            </Router>
         </>
     )
 }
