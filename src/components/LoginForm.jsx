@@ -2,14 +2,14 @@ import loginService from '../services/login'
 import blogService from '../services/blogs'
 
 const LoginForm = ({
-    username,
-    setUsername,
-    password,
-    setPassword,
-    setUser,
+    userState,
+    userDispatch,
     notificationDispatch
 }) => {
+    const username = userState.username
+    const password = userState.password
     const handleLogin = async (event) => {
+        
         event.preventDefault()
 
         try {
@@ -17,13 +17,12 @@ const LoginForm = ({
                 username,
                 password,
             })
+            console.log("user", user)
             window.localStorage.setItem(
                 'loggedNoteappUser',
                 JSON.stringify(user)
             )
-            setUser(user)
-            setUsername('')
-            setPassword('')
+           userDispatch({type:"SET_TOKEN", token:user.token})
             blogService.setToken(user.token)
         } catch (exception) {
             console.log(exception)
@@ -40,7 +39,7 @@ const LoginForm = ({
                     type="text"
                     value={username}
                     name="Username"
-                    onChange={({ target }) => setUsername(target.value)}
+                    onChange={({ target }) => userDispatch({type:"SET_USERNAME",username:target.value})}
                 />
             </div>
             <div>
@@ -50,7 +49,7 @@ const LoginForm = ({
                     type="password"
                     value={password}
                     name="Password"
-                    onChange={({ target }) => setPassword(target.value)}
+                    onChange={({ target }) => userDispatch({type:"SET_PASSWORD",password:target.value})}
                 />
             </div>
             <button type="submit">login</button>

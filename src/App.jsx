@@ -12,17 +12,27 @@ import {
     notificationSideEffects,
     initialNotificationState,
 } from './reducers/notifications'
+import {
+    userReducer,
+    initialUserState
+} from './reducers/user'
 
 const App = () => {
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
-    const [user, setUser] = useState(null)
+    //const [username, setUsername] = useState('')
+    //const [password, setPassword] = useState('')
+    //const [user, setUser] = useState(null)
     //const [submittedBlog, setSubmittedBlog] = useState(null)
     const [refreshBlogs, setRefreshBlogs] = useState(null)
+
     const [notificationState, notificationDispatch] = useReducer(
         notificationReducer,
         initialNotificationState
     )
+
+    const [userState, userDispatch] = useReducer(
+        userReducer, initialUserState
+    )
+
     const queryClient = useQueryClient()
     useEffect(() => {
         notificationSideEffects(notificationState, notificationDispatch)
@@ -32,7 +42,7 @@ const App = () => {
         queryKey: ['blogs'],
         queryFn: blogService.getAll,
     })
-    console.log(JSON.parse(JSON.stringify(blogQuery)))
+    //console.log(JSON.parse(JSON.stringify(blogQuery)))
 
     const blogs = blogQuery.data
 
@@ -50,7 +60,10 @@ const App = () => {
         const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
         if (loggedUserJSON) {
             const user = JSON.parse(loggedUserJSON)
-            setUser(user)
+            console.log(user)
+            //setUser(user)
+            userDispatch({type:"SET_USERNAME", username:user.username})
+            userDispatch({type:"SET_NAME", name:user.name})
             blogService.setToken(user.token)
         }
     }, [])
@@ -65,7 +78,8 @@ const App = () => {
         console.log(`creating new blog ${newBlog}`)
         //await blogService.create({ ...newBlog, user: user.id })
         //setSubmittedBlog(newBlog)
-        newBlogMutation.mutate({ ...newBlog, user: user.id })
+        newBlogMutation.mutate(newBlog)
+        // it doesn't need the user info as the backend middleware gets this from the db via the token
 
         notificationDispatch({
             type: 'SET_MESSAGE',
@@ -88,7 +102,7 @@ const App = () => {
         curBlogs[index] = response
         console.log(curBlogs)
         //setSubmittedBlog(curBlogs) */
-        console.log("Liking blog", updatedBlog)
+        //console.log("Liking blog", updatedBlog)
         likeBlogMutation.mutate(updatedBlog)
 
     }
@@ -109,17 +123,14 @@ const App = () => {
         return <div>loading blogs...</div>
     }
 
-    if (user === null) {
+    if (userState.token === null) {
         return (
             <>
                 <Notification notificationState={notificationState} />
                 <LoginForm
                     data-testid="login-form"
-                    username={username}
-                    setUsername={setUsername}
-                    password={password}
-                    setPassword={setPassword}
-                    setUser={setUser}
+                    userState={userState}
+                    userDispatch={userDispatch}
                     notificationDispatch={notificationDispatch}
                 />
             </>
@@ -132,8 +143,8 @@ const App = () => {
             <BlogList
                 key={JSON.stringify(blogs)}
                 blogs={blogs}
-                user={user}
-                setUser={setUser}
+                userDispatch={userDispatch}
+                userState={userState}
                 giveLike={giveLike}
                 deleteBlog={deleteBlog}
             />

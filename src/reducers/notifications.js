@@ -1,5 +1,3 @@
-import { useReducer , useEffect} from 'react'
-
 export const notificationReducer = (
     state = { message: '', messageType: '', timeoutId: null },
     action

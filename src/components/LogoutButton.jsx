@@ -1,10 +1,12 @@
 import blogService from '../services/blogs'
 
-const LogoutButton = ({ setUser, user }) => {
+const LogoutButton = ({ userDispatch, userState }) => {
     const logoutHandler = (event) => {
         console.log(`Logging out ${user.name}`)
         event.preventDefault()
-        setUser(null)
+        userDispatch({type:"SET_USERNAME",username:''})
+        userDispatch({type:"SET_PASSWORD",password:''})
+        userDispatch({type:"SET_TOKEN",token:null})
         blogService.setToken(null)
         window.localStorage.removeItem('loggedNoteappUser')
     }

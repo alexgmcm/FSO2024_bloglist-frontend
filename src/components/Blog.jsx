@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import blogService from '../services/blogs'
 
-const Blog = ({ blog, giveLike, user, deleteBlog }) => {
+const Blog = ({ blog, giveLike, userState, deleteBlog }) => {
     const [visible, setVisible] = useState(false)
 
     const blogStyle = {
@@ -35,7 +35,7 @@ const Blog = ({ blog, giveLike, user, deleteBlog }) => {
     const isUser = () => {
         if (!blog.user) {
             return { display: 'none' }
-        } else if (blog.user.username === user.username) {
+        } else if (blog.user.username === userState.username) {
             return {}
         } else {
             return { display: 'none' }
