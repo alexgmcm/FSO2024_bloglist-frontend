@@ -1,6 +1,9 @@
 import LogoutButton from './LogoutButton'
+import { useContext } from 'react'
+import { UserContext } from '../contexts/UserContext'
 
-const Header = ({userState, userDispatch}) => {
+const Header = () => {
+const {userState, userDispatch} = useContext(UserContext)
 if (userState) {
 return (
     <div>

@@ -1,11 +1,11 @@
 import loginService from '../services/login'
 import blogService from '../services/blogs'
-
-const LoginForm = ({
-    userState,
-    userDispatch,
-    notificationDispatch
-}) => {
+import { useContext } from 'react'
+import { UserContext } from '../contexts/UserContext'
+import { NotificationContext } from '../contexts/NotificationContext'
+const LoginForm = () => {
+    const {userState, userDispatch} =  useContext(UserContext)
+    const {notificationState, notificationDispatch} = useContext(NotificationContext)
     const username = userState.username
     const password = userState.password
     const handleLogin = async (event) => {

@@ -1,6 +1,8 @@
 import blogService from '../services/blogs'
-
-const LogoutButton = ({ userDispatch, userState }) => {
+import { useContext } from 'react'
+import { UserContext } from '../contexts/UserContext'
+const LogoutButton = () => {
+    const {userState: user, userDispatch} = useContext(UserContext)
     const logoutHandler = (event) => {
         console.log(`Logging out ${user.name}`)
         event.preventDefault()

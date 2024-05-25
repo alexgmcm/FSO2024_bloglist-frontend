@@ -1,7 +1,10 @@
 import Blog from './Blog'
 import PropTypes from 'prop-types'
+import { useContext } from 'react'
+import { UserContext } from '../contexts/UserContext'
 
-const BlogList = ({ blogs, userState, giveLike, deleteBlog }) => {
+const BlogList = ({ blogs,  giveLike, deleteBlog }) => {
+    const {userState, userDispatch} = useContext(UserContext)
     return (
 
         <div>
@@ -20,7 +23,6 @@ const BlogList = ({ blogs, userState, giveLike, deleteBlog }) => {
 
 BlogList.propTypes = {
     blogs: PropTypes.array.isRequired,
-    userState: PropTypes.object.isRequired,
     giveLike: PropTypes.func.isRequired,
     deleteBlog: PropTypes.func.isRequired,
 }

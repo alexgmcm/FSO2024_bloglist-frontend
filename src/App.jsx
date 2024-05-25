@@ -17,13 +17,15 @@ import {
 } from './reducers/notifications'
 import { userReducer, initialUserState } from './reducers/user'
 import Header from './components/Header'
+import { NotificationContext } from './contexts/NotificationContext.js';
+import { UserContext } from './contexts/UserContext.js'
+
 
 const App = () => {
     //const [username, setUsername] = useState('')
     //const [password, setPassword] = useState('')
     //const [user, setUser] = useState(null)
     //const [submittedBlog, setSubmittedBlog] = useState(null)
-    const [refreshBlogs, setRefreshBlogs] = useState(null)
 
     const [notificationState, notificationDispatch] = useReducer(
         notificationReducer,
@@ -126,28 +128,30 @@ const App = () => {
     if (userState.token === null) {
         return (
             <>
-                <Notification notificationState={notificationState} />
+            <NotificationContext.Provider value={{notificationState, notificationDispatch}} >
+            <UserContext.Provider value = { {userState, userDispatch} }>
+                <Notification/>
                 <LoginForm
                     data-testid="login-form"
-                    userState={userState}
-                    userDispatch={userDispatch}
-                    notificationDispatch={notificationDispatch}
                 />
+                </UserContext.Provider>
+            </NotificationContext.Provider>
             </>
         )
     }
 
     return (
         <>
+        <NotificationContext.Provider value={{notificationState, notificationDispatch}} >
+        <UserContext.Provider value = { {userState, userDispatch} }>
         <Router>
-            <Notification notificationState={notificationState} />
-            <Header userState={userState} userDispatch={userDispatch}/>
+            <Notification />
+            <Header />
             <Routes>
             <Route path="/users" element={<Users blogs={blogs} />}/>
             <Route path="/" element= {<> <BlogList
                 key={JSON.stringify(blogs)}
                 blogs={blogs}
-                userState={userState}
                 giveLike={giveLike}
                 deleteBlog={deleteBlog}
             /> <Togglable buttonLabel="new note">
@@ -157,6 +161,8 @@ const App = () => {
             
             </Routes>
             </Router>
+            </UserContext.Provider>
+            </NotificationContext.Provider>
         </>
     )
 }
