@@ -31,6 +31,7 @@ const App = () => {
         initialNotificationState
     )
 
+
     const [userState, userDispatch] = useReducer(userReducer, initialUserState)
 
     const queryClient = useQueryClient()
@@ -44,6 +45,7 @@ const App = () => {
     })
 
     const blogs = blogQuery.data
+    console.log("blogs",blogs)
     const userArray = blogs ? blogsToUserArray(blogs) : null
 
    
@@ -109,7 +111,8 @@ const matchedBlog = matchBlog
       ? blogs ? blogs.find(blog => blog.id === String(matchBlog.params.id)) : null
       : null
 
-    console.log("matchedUser",matchedUser)
+
+    console.log("matchedBlog",matchedBlog)
     if (blogQuery.isLoading) {
         return <div>loading blogs...</div>
     }
