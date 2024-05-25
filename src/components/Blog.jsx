@@ -45,6 +45,10 @@ const Blog = ({ blog, giveLike, deleteBlog }) => {
                 <div style={isUser()}>
                     <button onClick={handleDelete}>remove</button>
                 </div>
+                <h2>comments</h2>
+                <ul>
+                    {blog.comments.map(((comment, i) => <li key={i}>{comment.content}</li>))}
+                </ul>
             </div>
         )
     }
