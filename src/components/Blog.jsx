@@ -1,21 +1,8 @@
-import { useState } from 'react'
-import blogService from '../services/blogs'
-
-const Blog = ({ blog, giveLike, userState, deleteBlog }) => {
-    const [visible, setVisible] = useState(false)
-
-    const blogStyle = {
-        paddingTop: 10,
-        paddingLeft: 2,
-        border: 'solid',
-        borderWidth: 1,
-        marginBottom: 5,
-    }
-
-    const toggleVisible = (event) => {
-        event.preventDefault()
-        setVisible(!visible)
-    }
+import { blogStyle } from '../styles/blog'
+import { useContext } from 'react'
+import { UserContext } from '../contexts/UserContext'
+const Blog = ({ blog, giveLike, deleteBlog }) => {
+    const  {userState, userDispatch} = useContext(UserContext)
 
     const handleLike = async (event) => {
         event.preventDefault()
@@ -42,34 +29,25 @@ const Blog = ({ blog, giveLike, userState, deleteBlog }) => {
         }
     }
 
-    if (!visible) {
+    if(!blog){
+        return (<></>)
+    }
         return (
             <div style={blogStyle}>
-                <div style={{ display: 'inline' }}>
+               
+                 <h1>
                     {blog.title} {blog.author}
-                </div>{' '}
-                <button onClick={toggleVisible}>view</button>
-            </div>
-        )
-    } else {
-        return (
-            <div style={blogStyle}>
-                <div style={{ display: 'inline' }}>
-                    {' '}
-                    {blog.title} {blog.author}{' '}
-                </div>{' '}
-                <button onClick={toggleVisible}>hide</button>
-                <div>{blog.url}</div>
-                <div>likes {blog.likes}</div>{' '}
-                <button onClick={handleLike}>like</button>
-                <div>{blog.user ? blog.user.name : 'No User'}</div>
+                    </h1>
+                <div><a href={blog.url}>{blog.url}</a></div>
+                <div>likes {blog.likes}
+                <button onClick={handleLike}>like</button> </div>
+                <div>added by: {blog.user ? blog.user.name : 'No User'}</div>
                 <div style={isUser()}>
-                    {' '}
                     <button onClick={handleDelete}>remove</button>
                 </div>
             </div>
         )
     }
-}
+
 
 export default Blog

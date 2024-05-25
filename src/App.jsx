@@ -1,15 +1,17 @@
-import { useState, useEffect, useRef, useReducer } from 'react'
+import {  useEffect, useReducer } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+import {  Routes, Route, Link, useMatch } from 'react-router-dom'
 
 import BlogList from './components/BlogList'
+import Blog from './components/Blog.jsx'
 import LoginForm from './components/LoginForm'
 import blogService from './services/blogs'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import Users from './components/Users'
+import User from './components/User.jsx'
 import {
     notificationReducer,
     notificationSideEffects,
@@ -19,14 +21,11 @@ import { userReducer, initialUserState } from './reducers/user'
 import Header from './components/Header'
 import { NotificationContext } from './contexts/NotificationContext.js';
 import { UserContext } from './contexts/UserContext.js'
+import { blogsToUserArray } from './helpers/blogsToUserArray.js'
 
 
 const App = () => {
-    //const [username, setUsername] = useState('')
-    //const [password, setPassword] = useState('')
-    //const [user, setUser] = useState(null)
-    //const [submittedBlog, setSubmittedBlog] = useState(null)
-
+   
     const [notificationState, notificationDispatch] = useReducer(
         notificationReducer,
         initialNotificationState
@@ -43,20 +42,11 @@ const App = () => {
         queryKey: ['blogs'],
         queryFn: blogService.getAll,
     })
-    //console.log(JSON.parse(JSON.stringify(blogQuery)))
 
     const blogs = blogQuery.data
-    console.log(blogs)
+    const userArray = blogs ? blogsToUserArray(blogs) : null
 
-    /*
-      // OLD CODE USING USE STATE FOR BLOGS
-    useEffect(() => {
-        blogService.getAll().then((blogs) => {
-            //console.log(blogs)
-            setBlogs(blogs.sort((a, b) => b.likes - a.likes))
-        })
-    }, [submittedBlog])
-    */
+   
 
     useEffect(() => {
         const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
@@ -79,8 +69,6 @@ const App = () => {
     })
     const createBlog = async (newBlog) => {
         console.log(`creating new blog ${newBlog}`)
-        //await blogService.create({ ...newBlog, user: user.id })
-        //setSubmittedBlog(newBlog)
         newBlogMutation.mutate(newBlog)
         // it doesn't need the user info as the backend middleware gets this from the db via the token
 
@@ -97,15 +85,6 @@ const App = () => {
         },
     })
     const giveLike = async (updatedBlog) => {
-        /*
-        //OLD CODE
-        const response = await blogService.update(updatedBlog)
-        let curBlogs = blogs
-        const index = curBlogs.findIndex((x) => x.id === updatedBlog.id)
-        curBlogs[index] = response
-        console.log(curBlogs)
-        //setSubmittedBlog(curBlogs) */
-        //console.log("Liking blog", updatedBlog)
         likeBlogMutation.mutate(updatedBlog)
     }
 
@@ -116,11 +95,21 @@ const App = () => {
         },
     })
     const deleteBlog = async (id) => {
-        /*const response = await blogService.del(id)
-        setSubmittedBlog(response)*/
         delBlogMutation.mutate(id)
     }
 
+    
+  const matchUser = useMatch('/users/:id')
+  const matchedUser = matchUser
+    ? userArray ? userArray.find(user => user.id === String(matchUser.params.id)) : null
+    : null
+
+const matchBlog = useMatch('/blogs/:id')
+const matchedBlog = matchBlog
+      ? blogs ? blogs.find(blog => blog.id === String(matchBlog.params.id)) : null
+      : null
+
+    console.log("matchedUser",matchedUser)
     if (blogQuery.isLoading) {
         return <div>loading blogs...</div>
     }
@@ -144,23 +133,22 @@ const App = () => {
         <>
         <NotificationContext.Provider value={{notificationState, notificationDispatch}} >
         <UserContext.Provider value = { {userState, userDispatch} }>
-        <Router>
             <Notification />
             <Header />
             <Routes>
-            <Route path="/users" element={<Users blogs={blogs} />}/>
+            <Route path="/users" element={<Users userArray={userArray} />}/>
+            <Route path="/users/:id" element={<User user={matchedUser} />} />
+            <Route path="/blogs/:id" element={<Blog blog={matchedBlog} giveLike={giveLike} deleteBlog={deleteBlog} />} />
             <Route path="/" element= {<> <BlogList
                 key={JSON.stringify(blogs)}
                 blogs={blogs}
-                giveLike={giveLike}
-                deleteBlog={deleteBlog}
             /> <Togglable buttonLabel="new note">
             <BlogForm createBlog={createBlog} />
         </Togglable> </>} />
            
             
             </Routes>
-            </Router>
+
             </UserContext.Provider>
             </NotificationContext.Provider>
         </>

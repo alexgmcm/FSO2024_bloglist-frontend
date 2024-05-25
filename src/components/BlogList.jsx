@@ -1,21 +1,16 @@
-import Blog from './Blog'
 import PropTypes from 'prop-types'
-import { useContext } from 'react'
-import { UserContext } from '../contexts/UserContext'
+import { Link } from 'react-router-dom'
+import { blogStyle } from '../styles/blog'
 
-const BlogList = ({ blogs,  giveLike, deleteBlog }) => {
-    const {userState, userDispatch} = useContext(UserContext)
+const BlogList = ({ blogs }) => {
+    console.log(blogs)
     return (
 
         <div>
-            {blogs.map((blog) => (
-                <Blog
-                    key={blog.id}
-                    blog={blog}
-                    giveLike={giveLike}
-                    userState={userState}
-                    deleteBlog={deleteBlog}
-                />
+            {blogs.map((blog,i) => (
+                <div key={i} style={blogStyle}>
+               <Link  to={`/blogs/${blog.id}`} >{blog.title}</Link>
+               </div>
             ))}
         </div>
     )
@@ -23,8 +18,7 @@ const BlogList = ({ blogs,  giveLike, deleteBlog }) => {
 
 BlogList.propTypes = {
     blogs: PropTypes.array.isRequired,
-    giveLike: PropTypes.func.isRequired,
-    deleteBlog: PropTypes.func.isRequired,
+
 }
 
 export default BlogList
