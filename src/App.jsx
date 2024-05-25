@@ -77,7 +77,7 @@ const App = () => {
         notificationDispatch({
             type: 'SET_MESSAGE',
             message: `A new blog ${newBlog.title} by ${newBlog.author} added!`,
-            messageType: 'notice',
+            messageType: 'success',
         })
     }
     const likeBlogMutation = useMutation({
@@ -145,7 +145,7 @@ const matchedBlog = matchBlog
             <Route path="/" element= {<> <BlogList
                 key={JSON.stringify(blogs)}
                 blogs={blogs}
-            /> <Togglable buttonLabel="new note">
+            /> <Togglable buttonLabel="new blog">
             <BlogForm createBlog={createBlog} />
         </Togglable> </>} />
            

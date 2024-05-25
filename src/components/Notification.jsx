@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { NotificationContext } from '../contexts/NotificationContext.js';
+import { Alert } from 'react-bootstrap';
 
 const Notification = () => {
     const notification = useContext(NotificationContext)
@@ -8,7 +9,7 @@ const Notification = () => {
     const {message, messageType} = notification.notificationState
     if (message) {
         
-        return <div className={messageType}>{message}</div>
+        return <Alert  variant={messageType}>{message}</Alert>
     }
 
     return <></>

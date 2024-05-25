@@ -1,5 +1,6 @@
 import blogService from '../services/blogs'
 import { useState } from 'react'
+import {  Form, Button } from 'react-bootstrap'
 
 const BlogForm = ({ createBlog }) => {
     const [author, setAuthor] = useState('')
@@ -17,10 +18,10 @@ const BlogForm = ({ createBlog }) => {
     return (
         <div>
             <h2>Create new</h2>
-            <form onSubmit={handleCreate}>
-                <div>
-                    title
-                    <input
+            <Form onSubmit={handleCreate}>
+            <Form.Group>
+            <Form.Label>title:</Form.Label>
+                    <Form.Control
                         data-testid="title"
                         type="text"
                         value={title}
@@ -28,10 +29,10 @@ const BlogForm = ({ createBlog }) => {
                         placeholder="write title here..."
                         onChange={({ target }) => setTitle(target.value)}
                     />
-                </div>
-                <div>
-                    author
-                    <input
+                </Form.Group>
+                <Form.Group>
+                <Form.Label>author:</Form.Label>
+                    <Form.Control
                         data-testid="author"
                         type="text"
                         value={author}
@@ -39,10 +40,10 @@ const BlogForm = ({ createBlog }) => {
                         placeholder="write author here..."
                         onChange={({ target }) => setAuthor(target.value)}
                     />
-                </div>
-                <div>
-                    url
-                    <input
+               </Form.Group>
+                <Form.Group>
+                <Form.Label>url:</Form.Label>
+                    <Form.Control
                         data-testid="url"
                         type="text"
                         value={url}
@@ -50,9 +51,9 @@ const BlogForm = ({ createBlog }) => {
                         placeholder="write url here..."
                         onChange={({ target }) => setUrl(target.value)}
                     />
-                </div>
-                <button type="submit">create</button>
-            </form>
+                </Form.Group>
+                <Button variant="primary" type="submit">create</Button>
+            </Form>
         </div>
     )
 }

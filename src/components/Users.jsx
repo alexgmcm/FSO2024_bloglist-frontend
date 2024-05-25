@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom"
+import Table from 'react-bootstrap/Table';
+
 const Users = ({userArray}) => {
     if (!userArray){
         return (<></>)
@@ -6,7 +8,7 @@ const Users = ({userArray}) => {
     return (
         <>
             <h1>Users</h1>
-            <table>
+            <Table striped>
                 <thead>
                     <tr>
                         <th scope="col">User</th>
@@ -24,7 +26,7 @@ const Users = ({userArray}) => {
                 )}
                
                 </tbody>
-            </table>
+            </Table>
         </>
     )
 }

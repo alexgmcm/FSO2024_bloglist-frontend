@@ -2,33 +2,52 @@ import LogoutButton from './LogoutButton'
 import { useContext } from 'react'
 import { UserContext } from '../contexts/UserContext'
 import { Link } from 'react-router-dom'
-import { navMenuStyle } from '../styles/navMenu'
+
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+import NavDropdown from 'react-bootstrap/NavDropdown';
 
 const Header = () => {
 const {userState, userDispatch} = useContext(UserContext)
 
-
+//{userState ? {userState.name} logged in.{' '} : <></>}
 if (userState) {
 return (
     <>
-    <div style={navMenuStyle}>
+    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+  <Navbar.Collapse id="responsive-navbar-nav">
+    <Nav className="me-auto">
+
+    <Nav.Link href="#" as="span">
     <Link to='/'> blogs </Link>
+</Nav.Link>
+
+    <Nav.Link href="#" as="span">
     <Link to='/users'> users </Link>
-    {userState.name} logged in.{' '}
+    </Nav.Link>
+    <Nav.Link href="#" as="span">
+        {userState
+          ? <em >{userState.name} logged in</em>
+          : <></>
+        }
+      </Nav.Link>
+
+    
     <LogoutButton userDispatch={userDispatch} userState={userState} />
-    </div>
-    <div>
+    </Nav>
+  </Navbar.Collapse>
+ 
+</Navbar>
+   
+    <div className="container">
     <h2>blogs</h2>
             </div>
             </>
 )
 }
 else {
-    return <div style={navMenuStyle}>
-    <Link to='/'> blogs </Link>
-    <Link to='/users'> users </Link>
-    No user logged in.
-    </div>
+    return <></>
 }
 }
 

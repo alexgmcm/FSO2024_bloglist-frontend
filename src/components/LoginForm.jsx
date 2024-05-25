@@ -3,6 +3,7 @@ import blogService from '../services/blogs'
 import { useContext } from 'react'
 import { UserContext } from '../contexts/UserContext'
 import { NotificationContext } from '../contexts/NotificationContext'
+import { Form, Button } from 'react-bootstrap'
 const LoginForm = () => {
     const {userState, userDispatch} =  useContext(UserContext)
     const {notificationState, notificationDispatch} = useContext(NotificationContext)
@@ -24,36 +25,39 @@ const LoginForm = () => {
             )
            userDispatch({type:"SET_TOKEN", token:user.token})
             blogService.setToken(user.token)
+            notificationDispatch({type:"SET_MESSAGE", message:`${username} logged in!`, messageType: "success"})
         } catch (exception) {
             console.log(exception)
-            notificationDispatch({type:"SET_MESSAGE", message:`Wrong credentials ${username} `, messageType: "error"})
+            notificationDispatch({type:"SET_MESSAGE", message:`Wrong credentials ${username} `, messageType: "danger"})
         }
     }
 
     return (
-        <form onSubmit={handleLogin}>
-            <div>
-                username
-                <input
+        <Form onSubmit={handleLogin}>
+            <Form.Group>
+            
+            <Form.Label>username</Form.Label>
+            
+                <Form.Control
                     data-testid="username"
                     type="text"
                     value={username}
                     name="Username"
                     onChange={({ target }) => userDispatch({type:"SET_USERNAME",username:target.value})}
                 />
-            </div>
-            <div>
-                password
-                <input
+            </Form.Group>
+            <Form.Group>
+                <Form.Label>password</Form.Label>
+                <Form.Control
                     data-testid="password"
                     type="password"
                     value={password}
                     name="Password"
                     onChange={({ target }) => userDispatch({type:"SET_PASSWORD",password:target.value})}
                 />
-            </div>
-            <button type="submit">login</button>
-        </form>
+            </Form.Group>
+            <Button variant="primary" type="submit">login</Button>
+        </Form>
     )
 }
 
